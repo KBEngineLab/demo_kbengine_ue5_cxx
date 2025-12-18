@@ -46,7 +46,7 @@ void TestNoBase::helloCB(int32 arg1)
 
 // 静态注册
 namespace {
-	const bool registered = []() {
+	const bool registeredTestNoBase = []() {
 		EntityComponentFactory::instance().registerType("TestNoBase", []() {
 			return new KBEngine::TestNoBase();
 		});

@@ -111,7 +111,7 @@ void NPC::onEnterWorldCallback(const std::shared_ptr<UKBEventData> pEventData)
 
 // 静态注册
 namespace {
-	const bool registered = []() {
+	const bool registeredNPC = []() {
 		EntityFactory::instance().registerType("NPC", []() {
 			return new KBEngine::NPC();
 		});

@@ -135,7 +135,7 @@ void Monster::onMoveSpeedChanged(uint8 oldValue)
 
 // 静态注册
 namespace {
-	const bool registered = []() {
+	const bool registeredMonster = []() {
 		EntityFactory::instance().registerType("Monster", []() {
 			return new KBEngine::Monster();
 		});

@@ -377,7 +377,7 @@ void Avatar::onUtypeChanged(uint32 oldValue)
 
 // 静态注册
 namespace {
-	const bool registered = []() {
+	const bool registeredAvatar = []() {
 		EntityFactory::instance().registerType("Avatar", []() {
 			return new KBEngine::Avatar();
 		});
