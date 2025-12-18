@@ -1,0 +1,79 @@
+# ============================================
+# Unreal Engine C++ Project .gitignore
+# ============================================
+
+# --- 必须忽略的 UE 中间文件 ---
+[Bb]inaries/
+[Bb]uild/
+Intermediate/
+DerivedDataCache/
+Saved/
+DerivedDataCacheBoot/
+Shaders/WorkingDirectory/
+
+# --- 不要忽略 .Target.cs/.Build.cs ---
+# （这些对 C++ 项目是必须的）
+# *.Target.cs  # 不要使用
+# *.Build.cs   # 不要使用
+
+# --- IDE / 编辑器 生成文件 ---
+.vs/
+.vscode/
+.idea/
+*.suo
+*.user
+*.userprefs
+*.iml
+*.VC.db
+*.VC.VC.opendb
+*.opensdf
+*.sdf
+
+# --- 系统临时文件 ---
+*.DS_Store
+*.tmp
+Thumbs.db
+
+# --- 编译产物 ---
+*.obj
+*.pdb
+*.idb
+*.pch
+*.dll
+*.exe
+*.lib
+*.app
+*.dylib
+*.so
+*.o
+*.a
+
+# --- Crash dumps ---
+*.dmp
+
+# --- 打包后的文件 ---
+*.pak
+*.sig
+
+# --- 备份文件 ---
+*.bak
+*.old
+
+# --- Optional: 忽略 UE 自动生成的 `Config/DefaultEditor.ini.backup` 等 ---
+*.backup
+
+# --- 忽略 Plugin 中间文件 ---
+Plugins/*/Intermediate/
+Plugins/*/Binaries/
+Plugins/*/Saved/
+
+demo_ue5_cxx.sln
+demo_ue5_cxx.sln.DotSettings.user
+.vsconfig
+
+# --- 不忽略的（重要） ---
+# 以下这些必须提交，不要在 .gitignore 写入忽略规则：
+#   Source/
+#   Config/
+#   Content/
+#   Plugins/<YourPlugins>/Source/
