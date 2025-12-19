@@ -3,7 +3,9 @@
 
 #include "UI/LoginWidget.h"
 
+#include "KBEngine.h"
 #include "KBETypes.h"
+#include "KBEvent.h"
 #include "Components/Button.h"
 #include "Components/CanvasPanel.h"
 #include "Components/TextBlock.h"
@@ -94,6 +96,22 @@ void ULoginWidget::UIEnterGameBtnClicked()
 	// 这里偷懒直接进入新场景，实际上应该在addSpaceGeometryMapping的事件中去创建跳转场景
 	// UGameplayStatics::OpenLevel(GetWorld(), "GameWorld");
 	KBEngine::Account::Instance->pBaseEntityCall->selectAvatarGame(SelectAvatarDBID);
+}
+
+void ULoginWidget::UILoginBtnClicked(FString username, FString password, TArray<uint8> datas)
+{
+	if (!KBEngine::KBEngineApp::getSingleton().isInitialized())
+	{
+		return ;
+	}
+	DEBUG_MSG("UGameKBEMain::login");
+	KBEngine::KBEngineApp::getSingleton().reset();
+
+	auto pEventData = std::make_shared<UKBEventData_login>();
+	pEventData->username = username;
+	pEventData->password = password;
+	pEventData->datas = datas;
+	KBENGINE_EVENT_FIRE(KBEngine::KBEventTypes::login, pEventData);
 }
 
 void ULoginWidget::NativeConstruct()

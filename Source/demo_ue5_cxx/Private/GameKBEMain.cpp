@@ -83,25 +83,6 @@ void UGameKBEMain::InitWithConfig()
 
 }
 
-bool UGameKBEMain::login(FString username, FString password, TArray<uint8> datas)
-{
-
-	DEBUG_MSG("UGameKBEMain::login");
-	if (!KBEngine::KBEngineApp::getSingleton().isInitialized())
-	{
-		return false;
-	}
-
-	KBEngine::KBEngineApp::getSingleton().reset();
-
-	auto pEventData = std::make_shared<UKBEventData_login>();
-	pEventData->username = username;
-	pEventData->password = password;
-	pEventData->datas = datas;
-	KBENGINE_EVENT_FIRE(KBEngine::KBEventTypes::login, pEventData);
-	return true;
-}
-
 void UGameKBEMain::KBEngineEventPause()
 {
 	KBENGINE_EVENT_PAUSE();

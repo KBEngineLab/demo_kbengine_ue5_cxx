@@ -71,6 +71,13 @@ public:
 	void UIEnterGameBtnClicked();
 
 
+	/**
+	 * 进入游戏
+	*/
+	UFUNCTION(BlueprintCallable)
+	void UILoginBtnClicked(FString username, FString password, TArray<uint8> datas);
+
+
 	uint64 SelectAvatarDBID;
 
 

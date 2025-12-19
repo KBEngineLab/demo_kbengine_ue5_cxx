@@ -55,9 +55,6 @@ public:
 	void InitWithConfig();
 
 
-	UFUNCTION(BlueprintCallable, Category = "KBEngine")
-	bool login(FString username, FString password, TArray<uint8> datas);
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="KBEngine")
 	UKBEMainConfig* Config;
