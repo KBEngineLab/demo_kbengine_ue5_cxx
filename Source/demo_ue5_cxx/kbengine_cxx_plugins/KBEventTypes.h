@@ -103,7 +103,6 @@ struct KBEventTypes
 	// <para> param1(uint16): retcode. // server_errors</para>
 	static const KBString onReloginBaseappFailed;
 
-
 	// ------------------------------------实体cell相关事件------------------------------------
 
 	// Entity enter the client-world.

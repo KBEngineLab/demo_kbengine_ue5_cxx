@@ -16,18 +16,14 @@ Account::Account():
 	AccountBase(),
 	characters()
 {
-	if (Instance == nullptr)
-	{
-		Instance = this;
-	}
+
+	Instance = this;
 }
 
 Account::~Account()
 {
-	if (Instance == this)
-	{
-		Instance = nullptr;
-	}
+
+	Instance = nullptr;
 }
 
 void Account::__init__()

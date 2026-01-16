@@ -24,6 +24,7 @@ Avatar::~Avatar()
 
 void Avatar::__init__()
 {
+	UE_LOG(LogTemp, Log, TEXT("Avatar::__init__(): __init__ %d"),this->id_);
 	std::string EventName =
 		std::string("onAvatarEnterSpaceCallback_") + std::to_string(id());
 
@@ -71,8 +72,8 @@ void Avatar::onAvatarEnterSpaceCallback(std::shared_ptr<UKBEventData> pEventData
 				UE_LOG(LogTemp, Error, TEXT("PlayerController not ready"));
 				return;
 			}
-
-			FVector SpawnLocation = FVector(position.z * 100.f, position.x * 100.f, 100.f);
+			
+			FVector SpawnLocation = FVector(position.x * 100.f, position.z * 100.f,  500.f);
 			// FVector SpawnLocation = FVector(0, 0, 300);
 			FRotator SpawnRotation = FRotator::ZeroRotator;
 
@@ -95,21 +96,53 @@ void Avatar::onAvatarEnterSpaceCallback(std::shared_ptr<UKBEventData> pEventData
 				PlayerCharacter = Player;
 				PlayerCharacter->AvatarEntity = this;
 				PlayerCharacter->UpdateHeadInfo();
+
+				PlayerCharacter->SetActorLabel(
+					FString::Printf(TEXT("Player__%d__"), id())
+				);
 			}
 		}else
 		{
 			UWorld* World = AWorldGameMode::Instance->GetWorld();
 
-			FVector SpawnLocation(position.z * 100.f, position.x * 100.f, 100.f); // 可以根据 NPC 位置设置
+			FVector SpawnLocation(position.x * 100.f, position.z * 100.f, position.y * 100.f + 500.f); // 可以根据 NPC 位置设置
 			FRotator SpawnRotation(0.f, 0.f, 0.f);
 
 			FActorSpawnParameters SpawnParams;
 			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-			SpawnParams.Name = FName(*FString::Printf(TEXT("Monster_%d"), id()));
+			// SpawnParams.Name = FName(*FString::Printf(TEXT("Monster_%d"), id()));
 			// 生成蓝图 NPC
 			AvatarCharacter = World->SpawnActor<AAvatarCharacter>(AWorldGameMode::Instance->AvatarBlueprintClass, SpawnLocation, SpawnRotation, SpawnParams);
 			AvatarCharacter->AvatarEntity = this;
 			AvatarCharacter->UpdateHeadInfo();
+
+			AvatarCharacter->SetActorLabel(
+				FString::Printf(TEXT("Avatar__%d__"), id())
+			);
+
+			FVector TargetPos(
+				position.x * 100.f,
+				position.z * 100.f,
+				position.y * 100.f + 500.f   // 从上方开始
+			);
+
+			FHitResult Hit;
+			FCollisionQueryParams Params;
+			Params.AddIgnoredActor(AvatarCharacter);
+
+			bool bHit = AvatarCharacter->GetWorld()->LineTraceSingleByChannel(
+				Hit,
+				TargetPos,
+				TargetPos - FVector(0, 0, 2000.f),   // 向下
+				ECC_Visibility,
+				Params
+			);
+
+			if (bHit)
+			{
+				TargetPos.Z = Hit.ImpactPoint.Z + 87.f; // 胶囊底到脚
+			}
+			AvatarCharacter->SetActorLocation(TargetPos, false);
 		}
 	});
 
@@ -188,13 +221,36 @@ void Avatar::onPositionChanged(const KBVector3f& oldValue)
 	{
 		if (PlayerCharacter)
 		{
-			PlayerCharacter->SetActorLocation(FVector(position.z * 100.f, position.x * 100.f, 100.f));
+			PlayerCharacter->SetActorLocation(FVector(position.x * 100.f, position.z * 100.f, position.y * 100.f));
 		}
 	}else
 	{
 		if (AvatarCharacter)
 		{
-			AvatarCharacter->SetActorLocation(FVector(position.z * 100.f, position.x * 100.f, 100.f));
+			FVector TargetPos(
+				position.x * 100.f,
+				position.z * 100.f,
+				position.y * 100.f + 500.f   // 从上方开始
+			);
+
+			FHitResult Hit;
+			FCollisionQueryParams Params;
+			Params.AddIgnoredActor(AvatarCharacter);
+
+			bool bHit = AvatarCharacter->GetWorld()->LineTraceSingleByChannel(
+				Hit,
+				TargetPos,
+				TargetPos - FVector(0, 0, 2000.f),   // 向下
+				ECC_Visibility,
+				Params
+			);
+
+			if (bHit)
+			{
+				TargetPos.Z = Hit.ImpactPoint.Z + 87.f; // 胶囊底到脚
+			}
+			AvatarCharacter->SetActorLocation(TargetPos, false);
+			// AvatarCharacter->SetActorLocation(FVector(position.x * 100.f, position.z * 100.f, position.y * 100.f + 87.f - 30.f));
 		}
 	}
 }
@@ -210,7 +266,30 @@ void Avatar::onSmoothPositionChanged(const KBVector3f& oldValue)
 	{
 		if (AvatarCharacter)
 		{
-			AvatarCharacter->SetActorLocation(FVector(position.z * 100.f, position.x * 100.f, 100.f));
+			FVector TargetPos(
+				position.x * 100.f,
+				position.z * 100.f,
+				position.y * 100.f + 500.f   // 从上方开始
+			);
+
+			FHitResult Hit;
+			FCollisionQueryParams Params;
+			Params.AddIgnoredActor(AvatarCharacter);
+
+			bool bHit = AvatarCharacter->GetWorld()->LineTraceSingleByChannel(
+				Hit,
+				TargetPos,
+				TargetPos - FVector(0, 0, 2000.f),   // 向下
+				ECC_Visibility,
+				Params
+			);
+
+			if (bHit)
+			{
+				TargetPos.Z = Hit.ImpactPoint.Z + 87.f; // 胶囊底到脚
+			}
+			AvatarCharacter->SetActorLocation(TargetPos, false);
+			// AvatarCharacter->SetActorLocation(FVector(position.x * 100.f, position.z * 100.f, position.y * 100.f + 87.f - 30.f));
 		}
 	}
 }
@@ -221,14 +300,24 @@ void Avatar::onDirectionChanged(const KBVector3f& oldValue)
 
 	if (isPlayer())
 	{
-
-	}else
-	{
-		FRotator rotator = FRotator(FMath::RadiansToDegrees<float>(direction.y),FMath::RadiansToDegrees<float>(direction.z),FMath::RadiansToDegrees<float>(direction.x));
-		if (AvatarCharacter) AvatarCharacter->SetActorRotation(rotator);
+		// 玩家控制的角色不处理
 	}
+	else
+	{
+		// KBEngine的direction: X=Roll, Y=Pitch, Z=Yaw (弧度)
+		float RollDeg = -FMath::RadiansToDegrees(direction.x);             // Roll 取反
+		float PitchDeg = -FMath::RadiansToDegrees(direction.y);             // Pitch 取反
+		float YawDeg = -FMath::RadiansToDegrees(direction.z) + 90.f;      // Yaw 取反 + 坐标轴偏移
 
+		FRotator rotator(PitchDeg, YawDeg, RollDeg);
+
+		if (AvatarCharacter)
+		{
+			AvatarCharacter->SetActorRotation(rotator);
+		}
+	}
 }
+
 
 void Avatar::onAddSkill(int32 arg1)
 {

@@ -120,7 +120,7 @@ KBEngineApp::KBEngineApp(KBEngineArgs* pArgs):
 
 KBEngineApp::~KBEngineApp()
 {
-	destroy();
+	// destroy();
 	INFO_MSG("KBEngineApp::~KBEngineApp(): destructed!");
 }
 
@@ -213,6 +213,10 @@ void KBEngineApp::installEvents()
 
 void KBEngineApp::destroy()
 {
+	if (currserver_ == KBTEXT("baseapp"))
+	{
+		logout();
+	}
 	reset();
 	KBENGINE_DEREGISTER_ALL_EVENT();
 	resetMessages();
@@ -221,9 +225,12 @@ void KBEngineApp::destroy()
 	
 	if (pNetworkInterface_) pNetworkInterface_->destroy();
 	// KBE_SAFE_RELEASE(pNetworkInterface_);
+	Bundle::clearAllBundles();
 	pNetworkInterface_ = nullptr;
 	KBE_SAFE_RELEASE(pFilter_);
 	uninstallUKBETicker();
+
+	destroyKBEngineApp();
 }
 
 void KBEngineApp::resetMessages()
@@ -249,7 +256,7 @@ void KBEngineApp::reset()
 	serverdatas_.Clear();
 
 	serverVersion_ = KBTEXT("");
-	clientVersion_ = KBTEXT("2.6.3");
+	clientVersion_ = KBTEXT("2.6.4");
 	serverScriptVersion_ = KBTEXT("");
 	clientScriptVersion_ = KBTEXT("0.1.0");
 
@@ -2474,6 +2481,7 @@ void KBEngineApp::_updateVolatileData(ENTITY_ID entityID, float x, float y, floa
 	            
 	if (positionChanged)
 	{
+		KBVector3f oldPos(entity.position.x, entity.position.y, entity.position.z);
 		entity.position = isOptimized ? KBVector3f(x + entityServerPos_.x, y + entityServerPos_.y, z + entityServerPos_.z) : KBVector3f(x, y, z);
 		done = true;
 
@@ -2486,7 +2494,6 @@ void KBEngineApp::_updateVolatileData(ENTITY_ID entityID, float x, float y, floa
 		// KBENGINE_EVENT_FIRE(KBEventTypes::updatePosition, pEventData);
 
 
-		KBVector3f oldPos(entityServerPos_.x, entityServerPos_.y, entityServerPos_.z);
 		entity.onSmoothPositionChanged(oldPos);
 	}
 

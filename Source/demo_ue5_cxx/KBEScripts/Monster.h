@@ -36,6 +36,10 @@ public:
 	virtual void onDirectionChanged(const KBVector3f& oldValue) override;
 	virtual void onMoveSpeedChanged(uint8 oldValue) override;
 	AMonsterCharacter* MonsterActor;
+	
+
+private:
+	FString  actorId;
 };
 
 }

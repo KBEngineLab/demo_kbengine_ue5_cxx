@@ -95,16 +95,45 @@ void NPC::onEnterWorldCallback(const std::shared_ptr<UKBEventData> pEventData)
 
 
 
-	FVector SpawnLocation(position.z * 100.f, position.x * 100.f, 100.f); // 可以根据 NPC 位置设置
+	FVector SpawnLocation(position.x * 100.f, position.z * 100.f, position.y * 100.f + 500.f); 
 	FRotator SpawnRotation(0.f, 0.f, 0.f);
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	SpawnParams.Name = FName(*FString::Printf(TEXT("NPC_%d"), id()));
+	// SpawnParams.Name = FName(*FString::Printf(TEXT("NPC_%d"), id()));
 	// 生成蓝图 NPC
 	NPCActor = World->SpawnActor<ANPCCharacter>(AWorldGameMode::Instance->NPCBlueprintClass, SpawnLocation, SpawnRotation, SpawnParams);
 	NPCActor->NPCEntity = this;
 	NPCActor->UpdateHeadInfo();
+	NPCActor->SetActorLabel(
+		FString::Printf(TEXT("NPC__%d__"), id())
+	);
+
+
+	FVector TargetPos(
+		position.x * 100.f,
+		position.z * 100.f,
+		position.y * 100.f + 500.f   // 从上方开始
+	);
+
+	FHitResult Hit;
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(NPCActor);
+
+	bool bHit = NPCActor->GetWorld()->LineTraceSingleByChannel(
+		Hit,
+		TargetPos,
+		TargetPos - FVector(0, 0, 2000.f),   // 向下
+		ECC_Visibility,
+		Params
+	);
+
+	if (bHit)
+	{
+		TargetPos.Z = Hit.ImpactPoint.Z + 87.f; // 胶囊底到脚
+	}
+
+	NPCActor->SetActorLocation(TargetPos, false);
 }
 }
 
