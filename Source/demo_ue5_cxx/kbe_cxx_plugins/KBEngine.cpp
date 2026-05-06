@@ -22,6 +22,8 @@
 #include "EncryptionFilter.h"
 #include "GameThreadDispatcher.h"
 
+#include <chrono>
+
 namespace KBEngine
 {
 
@@ -64,7 +66,7 @@ KBEngineApp::KBEngineApp() :
 	isLoadedGeometry_(false),
 	component_(KBTEXT("client")),
 	pFilter_(NULL),
-	mainLoop_(nullptr)
+	mainLoopRunning_(false)
 	// ,
 	// pUKBETicker_(nullptr)
 {
@@ -111,7 +113,7 @@ KBEngineApp::KBEngineApp(KBEngineArgs* pArgs):
 	isLoadedGeometry_(false),
 	component_(KBTEXT("client")),
 	pFilter_(nullptr),
-	mainLoop_(nullptr)
+	mainLoopRunning_(false)
 	// pUKBETicker_(nullptr)
 {
 	INFO_MSG("KBEngineApp::KBEngineApp(): hello!");
@@ -284,47 +286,36 @@ void KBEngineApp::reset()
 
 void KBEngineApp::installUKBETicker()
 {
-	// if (pUKBETicker_ == nullptr)
-	// {
-	// 	pUKBETicker_ = NewObject<UKBETicker>();
-	// 	pUKBETicker_->AddToRoot();
-	// }
-
-	if (mainLoop_ == nullptr) {
-		// 创建一个线程运行事件循环
-		mainLoopThread_ = std::make_shared<hv::EventLoopThread>();
-		mainLoopThread_->start(); // 内部会创建 EventLoop 并在新线程 run()
-
-		mainLoop_ = mainLoopThread_->loop(); // 获取 EventLoopPtr
-
-		if (pArgs_!= nullptr && !pArgs_->disableMainLoop) {
-			mainLoop_->setInterval(15, [this](hv::TimerID timerID) {
-				this->process();
-			});
-		}
-
-
+	if (mainLoopRunning_.load())
+	{
+		return;
 	}
 
+	if (pArgs_ != nullptr && pArgs_->disableMainLoop)
+	{
+		return;
+	}
+
+	mainLoopRunning_ = true;
+	mainLoopThread_ = std::thread([this]()
+	{
+		// 用标准线程周期驱动，保持 15ms tick，避免引入额外事件循环依赖。
+		while (mainLoopRunning_.load())
+		{
+			this->process();
+			std::this_thread::sleep_for(std::chrono::milliseconds(15));
+		}
+	});
 }
 
 void KBEngineApp::uninstallUKBETicker()
 {
-	if (mainLoop_) {
-		mainLoop_->stop();
-		mainLoop_ = nullptr;
-	}
+	mainLoopRunning_ = false;
 
-	if (mainLoopThread_) {
-		mainLoopThread_->stop();
-		mainLoopThread_ = nullptr;
+	if (mainLoopThread_.joinable())
+	{
+		mainLoopThread_.join();
 	}
-	// if (pUKBETicker_)
-	// {
-	// 	pUKBETicker_->RemoveFromRoot();
-	// 	pUKBETicker_->ConditionalBeginDestroy();
-	// 	pUKBETicker_ = nullptr;
-	// }
 }
 
 bool KBEngineApp::initNetwork()
@@ -388,15 +379,15 @@ bool KBEngineApp::validEmail(const KBString& strEmail)
 
 void KBEngineApp::process()
 {
-	// 处理网络
-	// if (pNetworkInterface_)
-	// 	pNetworkInterface_->process();
+	// 先处理 socket 收到的原始数据，MessageReader 会把解析出的消息投递到 GameThreadDispatcher。
+	if (pNetworkInterface_)
+		pNetworkInterface_->process();
 
 	GameThreadDispatcher::Instance().Pump();
 
-	KBEvent::processOutEvents();
-	// 处理外层抛入的事件
 	KBEvent::processInEvents();
+	
+	KBEvent::processOutEvents();
 
 	// 向服务端发送心跳以及同步角色信息到服务端
 	sendTick();
@@ -860,22 +851,14 @@ void KBEngineApp::login_baseapp(bool noconnect)
 		KBENGINE_EVENT_FIRE_ALL(KBEventTypes::onLoginBaseapp, pEventData);
 
 
-		mainLoop_->runInLoop([this]{
+		if (pNetworkInterface_)
+		{
+			pNetworkInterface_->destroy();
+			pNetworkInterface_ = nullptr;
 
-			if (pNetworkInterface_)
-			{
-				pNetworkInterface_->destroy();
-				pNetworkInterface_ = nullptr;
-
-				initNetwork();
-				pNetworkInterface_->connectTo(baseappIP_, (!pArgs_->forceDisableUDP && baseappUdpPort_ > 0) ? baseappUdpPort_ : baseappTcpPort_, this, 2);
-			}
-		});
-
-		// pNetworkInterface_->destroy();
-		// pNetworkInterface_ = nullptr;
-		// initNetwork();
-		// pNetworkInterface_->connectTo(baseappIP_, (!pArgs_->forceDisableUDP && baseappUdpPort_ > 0) ? baseappUdpPort_ : baseappTcpPort_, this, 2);
+			initNetwork();
+			pNetworkInterface_->connectTo(baseappIP_, (!pArgs_->forceDisableUDP && baseappUdpPort_ > 0) ? baseappUdpPort_ : baseappTcpPort_, this, 2);
+		}
 	}
 	else
 	{

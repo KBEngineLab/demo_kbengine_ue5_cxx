@@ -1,6 +1,6 @@
 请注意：
 - 因为和UE5_default DEMO重复，所以本DEMO并未完成所有功能。
-- SDK 依赖Libhv ，请自行编译引入项目（当然SDK中已经提供了对应的DLL、头文件），DEMO中也做了Libhv的接入，详情请看ThirdParty/LibhvModule
+- SDK 网络层已改为原生 socket 实现，TCP 与 UDP/KCP 不再依赖 Libhv。
 - 目前仅在windows下测试，其他平台待测试
 
 已完成功能：

@@ -11,7 +11,10 @@ public class demo_ue5_cxx : ModuleRules
 	
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" ,"UMG","Slate","SlateCore", "OpenSSL"});
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "LibhvModule" });
+		if (Target.Platform == UnrealTargetPlatform.Win64)
+		{
+			PublicSystemLibraries.Add("ws2_32.lib");
+		}
 
 
 		PublicIncludePaths.AddRange(new string[]
