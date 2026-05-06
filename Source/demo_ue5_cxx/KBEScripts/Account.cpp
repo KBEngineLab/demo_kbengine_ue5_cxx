@@ -1,11 +1,11 @@
 #include "Account.h"
 
 #include "AvatarBase.h"
-#include "../kbengine_cxx_plugins/Entity.h"
-#include "../kbengine_cxx_plugins/KBEngine.h"
-#include "../kbengine_cxx_plugins/KBDebug.h"
+#include "../kbe_cxx_plugins/Entity.h"
+#include "../kbe_cxx_plugins/KBEngine.h"
+#include "../kbe_cxx_plugins/KBDebug.h"
 #include "LogicEvents.h"
-#include "../kbengine_cxx_plugins/EntityFactory.h"
+#include "../kbe_cxx_plugins/EntityFactory.h"
 #include "UI/LoginWidget.h"
 
 
@@ -52,7 +52,7 @@ void Account::__init__()
 	auto pEventData = std::make_shared<UKBEventData_onLoginSuccessfully>();
 	pEventData->entity_uuid = KBEngineApp::getSingleton().entity_uuid();
 	pEventData->entity_id = id();
-	KBENGINE_EVENT_FIRE("onLoginSuccessfully", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("onLoginSuccessfully", pEventData);
 
 	// 向服务端请求获得角色列表
 	pBaseEntityCall->reqAvatarList();

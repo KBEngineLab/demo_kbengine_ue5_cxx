@@ -1,9 +1,9 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
+// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "Character/MonsterCharacter.h"
 
-#include "KBDebug.h"
+#include "../../kbe_cxx_plugins/KBDebug.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "KBEScripts/Monster.h"
 

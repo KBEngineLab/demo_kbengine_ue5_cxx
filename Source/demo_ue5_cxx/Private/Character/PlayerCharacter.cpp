@@ -3,7 +3,7 @@
 
 #include "Character/PlayerCharacter.h"
 
-#include "KBEngine.h"
+#include "../../kbe_cxx_plugins/KBEngine.h"
 #include "KBEScripts/Avatar.h"
 
 

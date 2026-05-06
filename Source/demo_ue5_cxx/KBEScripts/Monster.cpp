@@ -1,9 +1,9 @@
 #include "Monster.h"
-#include "../kbengine_cxx_plugins/Entity.h"
+#include "../kbe_cxx_plugins/Entity.h"
 #include "LogicEvents.h"
 #include "WorldGameMode.h"
 
-#include "../kbengine_cxx_plugins/EntityFactory.h"
+#include "../kbe_cxx_plugins/EntityFactory.h"
 #include "Character/MonsterCharacter.h"
 
 
@@ -73,7 +73,7 @@ void Monster::onEnterWorld()
 	std::string EventName =
 	std::string("onMonsterEnterWorldCallback_") + std::to_string(id()) + "_" + TCHAR_TO_UTF8(*actorId);
 	// 此时关卡可能并未跳转成功，放在事件里处理
-	KBENGINE_EVENT_FIRE(EventName,nullptr);
+	KBENGINE_EVENT_FIRE_OUT(EventName,nullptr);
 }
 
 void Monster::onEnterSpace()

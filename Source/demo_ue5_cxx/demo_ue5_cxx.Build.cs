@@ -17,13 +17,13 @@ public class demo_ue5_cxx : ModuleRules
 		PublicIncludePaths.AddRange(new string[]
 		{
 			"demo_ue5_cxx",
-			"demo_ue5_cxx/kbengine_cxx_plugins"
+			"demo_ue5_cxx/kbe_cxx_plugins"
 		});
 
 		PrivateIncludePaths.AddRange(new string[]
 		{
 			"demo_ue5_cxx",
-			"demo_ue5_cxx/kbengine_cxx_plugins"
+			"demo_ue5_cxx/kbe_cxx_plugins"
 		});
 
 

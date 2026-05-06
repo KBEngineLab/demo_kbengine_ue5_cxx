@@ -1,8 +1,8 @@
 // Copyright 1998-2016 Epic Games, Inc. All Rights Reserved.
 
 #pragma once
-#include "../kbengine_cxx_plugins/KBECommon.h"
-#include "../kbengine_cxx_plugins/KBEvent.h"
+#include "../kbe_cxx_plugins/KBECommon.h"
+#include "../kbe_cxx_plugins/KBEvent.h"
 
 /**
 	所有由逻辑层产生的事件都在这里定义

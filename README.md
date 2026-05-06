@@ -1,4 +1,4 @@
-﻿请注意：
+请注意：
 - 因为和UE5_default DEMO重复，所以本DEMO并未完成所有功能。
 - SDK 依赖Libhv ，请自行编译引入项目（当然SDK中已经提供了对应的DLL、头文件），DEMO中也做了Libhv的接入，详情请看ThirdParty/LibhvModule
 - 目前仅在windows下测试，其他平台待测试
@@ -20,7 +20,7 @@
 - demo_ue5_cxx.uproject 右键 -> Generate Visual Studio Project File
 - 打开demo_ue5_cxx.sln 解决方案
 - 生成SDK（可选）
-    - gensdk.bat（start "" "%KBE_BIN_PATH%/kbcmd.exe" --clientsdk=cxx --outpath="D:\Workspace\UnrealProjects\demo_ue5_cxx\Source\demo_ue5_cxx\kbengine_cxx_plugins"）
+    - gensdk.bat（start "" "%KBE_BIN_PATH%/kbcmd.exe" --clientsdk=cxx --outpath="D:\Workspace\UnrealProjects\demo_ue5_cxx\Source\demo_ue5_cxx\kbe_cxx_plugins"）
 - 编译运行
 
 
@@ -65,11 +65,11 @@ BP_StartGameMode中会对配置进行初始化填充，详情请看BP_StartGameM
 ```c++
 #include "NPC.h"
 
-#include "../kbengine_cxx_plugins/Entity.h"
+#include "../kbe_cxx_plugins/Entity.h"
 #include "LogicEvents.h"
 #include "WorldGameMode.h"
 
-#include "../kbengine_cxx_plugins/EntityFactory.h"
+#include "../kbe_cxx_plugins/EntityFactory.h"
 #include "Character/NPCCharacter.h"
 
 class ANPCCharacter;

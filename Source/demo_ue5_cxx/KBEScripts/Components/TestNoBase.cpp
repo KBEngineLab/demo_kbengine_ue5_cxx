@@ -1,6 +1,6 @@
 #include "TestNoBase.h"
 #include "../Avatar.h"
-#include "../../kbengine_cxx_plugins/EntityComponentFactory.h"
+#include "../../kbe_cxx_plugins/EntityComponentFactory.h"
 
 namespace KBEngine
 {

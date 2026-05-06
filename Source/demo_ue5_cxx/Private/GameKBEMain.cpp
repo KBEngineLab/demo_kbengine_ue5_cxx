@@ -3,13 +3,13 @@
 
 #include "GameKBEMain.h"
 
-#include "KBDebug.h"
-#include "KBEMain.h"
+#include "kbe_cxx_plugins/KBDebug.h"
+#include "kbe_cxx_plugins/KBEMain.h"
 #include "KBEMainConfig.h"
-#include "KBEngine.h"
-#include "KBEngineArgs.h"
-#include "KBEvent.h"
-#include "KBEventTypes.h"
+#include "kbe_cxx_plugins/KBEngine.h"
+#include "kbe_cxx_plugins/KBEngineArgs.h"
+#include "kbe_cxx_plugins/KBEvent.h"
+#include "kbe_cxx_plugins/KBEventTypes.h"
 #include "Kismet/GameplayStatics.h"
 
 

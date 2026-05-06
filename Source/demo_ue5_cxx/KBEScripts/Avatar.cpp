@@ -1,9 +1,9 @@
 #include "Avatar.h"
-#include "../kbengine_cxx_plugins/Entity.h"
+#include "../kbe_cxx_plugins/Entity.h"
 #include "LogicEvents.h"
 #include "WorldGameMode.h"
 
-#include "../kbengine_cxx_plugins/EntityFactory.h"
+#include "../kbe_cxx_plugins/EntityFactory.h"
 #include "Character/AvatarCharacter.h"
 #include "Character/PlayerCharacter.h"
 
@@ -180,7 +180,7 @@ void Avatar::onEnterWorld()
 	if (!isPlayer())
 	{
 		std::string EventName = std::string("onAvatarEnterWorldCallback_") + std::to_string(id());
-		KBENGINE_EVENT_FIRE(EventName,nullptr);
+		KBENGINE_EVENT_FIRE_OUT(EventName,nullptr);
 	}
 }
 
@@ -205,7 +205,7 @@ void Avatar::onEnterSpace()
 	{
 		std::string EventName = std::string("onAvatarEnterSpaceCallback_") + std::to_string(id());
 		// 此时关卡可能并未跳转成功，放在事件里处理
-		KBENGINE_EVENT_FIRE(EventName,nullptr);
+		KBENGINE_EVENT_FIRE_OUT(EventName,nullptr);
 	}
 }
 
@@ -343,7 +343,7 @@ void Avatar::recvDamage(int32 arg1, int32 arg2, int32 arg3, int32 arg4)
 	pEventData->damageType = arg3;
 	pEventData->damage = arg4;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("recvDamage", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("recvDamage", pEventData);
 }
 
 void Avatar::onHPChanged(int32 oldValue)
@@ -351,7 +351,7 @@ void Avatar::onHPChanged(int32 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_HP>();
 	pEventData->HP = HP;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_HP", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_HP", pEventData);
 }
 
 void Avatar::onHP_MaxChanged(int32 oldValue)
@@ -359,7 +359,7 @@ void Avatar::onHP_MaxChanged(int32 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_HP_Max>();
 	pEventData->HP_Max = HP_Max;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_HP_Max", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_HP_Max", pEventData);
 }
 
 void Avatar::onMPChanged(int32 oldValue)
@@ -367,7 +367,7 @@ void Avatar::onMPChanged(int32 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_MP>();
 	pEventData->MP = MP;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_MP", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_MP", pEventData);
 }
 
 void Avatar::onMP_MaxChanged(int32 oldValue)
@@ -375,7 +375,7 @@ void Avatar::onMP_MaxChanged(int32 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_MP_Max>();
 	pEventData->MP_Max = MP_Max;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_MP_Max", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_MP_Max", pEventData);
 }
 
 void Avatar::onForbidsChanged(int32 oldValue)
@@ -383,7 +383,7 @@ void Avatar::onForbidsChanged(int32 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_forbids>();
 	pEventData->forbids = forbids;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_forbids", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_forbids", pEventData);
 }
 
 void Avatar::onLevelChanged(uint16 oldValue)
@@ -396,7 +396,7 @@ void Avatar::onModelIDChanged(uint32 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_modelID>();
 	pEventData->modelID = modelID;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_modelID", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_modelID", pEventData);
 }
 
 void Avatar::onModelScaleChanged(uint8 oldValue)
@@ -404,7 +404,7 @@ void Avatar::onModelScaleChanged(uint8 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_modelScale>();
 	pEventData->modelScale = modelScale;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_modelScale", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_modelScale", pEventData);
 }
 
 void Avatar::onMoveSpeedChanged(uint8 oldValue)
@@ -414,7 +414,7 @@ void Avatar::onMoveSpeedChanged(uint8 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_moveSpeed>();
 	pEventData->moveSpeed = moveSpeed;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_moveSpeed", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_moveSpeed", pEventData);
 }
 
 void Avatar::onNameChanged(const KBString& oldValue)
@@ -422,7 +422,7 @@ void Avatar::onNameChanged(const KBString& oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_name>();
 	pEventData->name = name;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_name", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_name", pEventData);
 }
 
 void Avatar::onOwn_valChanged(uint16 oldValue)
@@ -440,7 +440,7 @@ void Avatar::onStateChanged(int8 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_state>();
 	pEventData->state = state;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_state", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_state", pEventData);
 }
 
 void Avatar::onSubStateChanged(uint8 oldValue)
@@ -448,7 +448,7 @@ void Avatar::onSubStateChanged(uint8 oldValue)
 	auto pEventData = std::make_shared<UKBEventData_set_subState>();
 	pEventData->subState = subState;
 	pEventData->entityID = id();
-	KBENGINE_EVENT_FIRE("set_subState", pEventData);
+	KBENGINE_EVENT_FIRE_OUT("set_subState", pEventData);
 }
 
 void Avatar::onUidChanged(uint32 oldValue)

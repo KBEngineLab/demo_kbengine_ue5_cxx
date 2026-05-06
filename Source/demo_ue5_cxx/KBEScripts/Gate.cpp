@@ -1,7 +1,7 @@
 #include "Gate.h"
-#include "../kbengine_cxx_plugins/Entity.h"
+#include "../kbe_cxx_plugins/Entity.h"
 #include "LogicEvents.h"
-#include "../kbengine_cxx_plugins/EntityFactory.h"
+#include "../kbe_cxx_plugins/EntityFactory.h"
 
 namespace KBEngine
 {
