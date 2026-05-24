@@ -258,7 +258,7 @@ void KBEngineApp::reset()
 	serverdatas_.Clear();
 
 	serverVersion_ = KBTEXT("");
-	clientVersion_ = KBTEXT("2.8.1");
+	clientVersion_ = KBTEXT("2.8.2");
 	serverScriptVersion_ = KBTEXT("");
 	clientScriptVersion_ = KBTEXT("0.1.0");
 
